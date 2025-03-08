@@ -1,0 +1,5 @@
+train: /Users/obaidmohiuddin/Desktop/curly-spoon27/backend/parking_dataset/train/images
+val: /Users/obaidmohiuddin/Desktop/curly-spoon27/backend/parking_dataset/val/images
+
+nc: 2  # Number of classes (e.g., 1: vacant, 2: occupied)
+names: ['vacant', 'occupied']
