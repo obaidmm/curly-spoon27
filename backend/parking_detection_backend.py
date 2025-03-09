@@ -2,19 +2,22 @@ import os
 import cv2
 import argparse
 import numpy as np
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, send_from_directory
 from ultralytics import YOLO
 from PIL import Image, ImageDraw, ImageFont
+from flask_cors import CORS
 
 # Initialize Flask app
 app = Flask(__name__)
+
+CORS(app)
 
 # Load YOLO model
 MODEL_PATH = "best.pt"
 model = YOLO(MODEL_PATH)
 
 # Ensure output directory exists
-OUTPUT_DIR = "/Users/obaidmohiuddin/Downloads/test_data/output"
+OUTPUT_DIR = "/Users/tejanveshgangavarapu/Documents/GitHub/curly-spoon27/backend/test_data/output"
 RESULTS_FILE = os.path.join(OUTPUT_DIR, "results.txt")
 
 @app.route("/detect", methods=["POST"])
@@ -29,7 +32,8 @@ def detect():
     img = Image.open(image_path)
     results = model(img)
     
-    output_image_path = os.path.join(OUTPUT_DIR, os.path.basename(image_path))
+    output_image_name = os.path.basename(image_path) #output_image_name is the name of the image
+    output_image_path = os.path.join(OUTPUT_DIR, os.path.basename(image_path)) #path of the output image
     
     # Draw bounding boxes on the image
     draw = ImageDraw.Draw(img)
@@ -67,7 +71,7 @@ def detect():
     
     # Return JSON response with detection results
     return jsonify({
-        "image_path": output_image_path,
+        "image_path": output_image_name, #image_path is the name of the image
         "detections": detections,
         "results_file": RESULTS_FILE
     })
@@ -93,7 +97,9 @@ def download():
 
     return send_file(safe_path, mimetype="image/png")
 
-
+@app.route("/output/<filename>")
+def serve_image(filename):
+    return send_from_directory(OUTPUT_DIR, filename)
 
 @app.route("/get_results", methods=["GET"])
 def get_results():
