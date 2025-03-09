@@ -1,17 +1,24 @@
 import os
+import argparse
 from ultralytics import YOLO
 from PIL import Image
 
-# Define paths
-MODEL_PATH = "/Users/obaidmohiuddin/Desktop/curly-spoon27/backend/best.pt"
-IMAGE_FOLDER = "/Users/obaidmohiuddin/Downloads/test_data/test_images/"
-RESULTS_FILE = "/Users/obaidmohiuddin/Downloads/test_data/results/results.txt"
+# Parse command-line arguments
+parser = argparse.ArgumentParser(description="Run YOLO model on images and save results.")
+parser.add_argument("--image_folder", type=str, required=True, help="Path to the input images directory.")
+parser.add_argument("--results_folder", type=str, required=True, help="Path to save results.")
+args = parser.parse_args()
 
-# Load YOLOv5 model
+# Define paths dynamically
+MODEL_PATH = "best.pt"  # Ensure the model is in the same directory as test.py
+IMAGE_FOLDER = args.image_folder
+RESULTS_FILE = os.path.join(args.results_folder, "results.txt")
+
+# Load YOLO model
 model = YOLO(MODEL_PATH)
 
 # Ensure results directory exists
-os.makedirs(os.path.dirname(RESULTS_FILE), exist_ok=True)
+os.makedirs(args.results_folder, exist_ok=True)
 
 # Open results.txt to store detections
 with open(RESULTS_FILE, "w") as f_out:
@@ -32,7 +39,10 @@ with open(RESULTS_FILE, "w") as f_out:
                     confidence = float(box[4])  # Confidence score
                     class_id = int(box[5])  # Class label
 
+                    # Convert YOLO class IDs (0 → 1, 1 → 2)
+                    converted_class_id = class_id + 1
+
                     # Write results to file
-                    f_out.write(f"{filename} {class_id} {confidence} {x_min} {y_min} {x_max} {y_max}\n")
+                    f_out.write(f"{filename} {converted_class_id} {confidence:.4f} {x_min:.2f} {y_min:.2f} {x_max:.2f} {y_max:.2f}\n")
 
 print(f"✅ Detection results saved in: {RESULTS_FILE}")

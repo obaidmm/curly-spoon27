@@ -1,0 +1,2 @@
+DEBUG: Opening detection file at /Users/obaidmohiuddin/Downloads/test_data/results/results.txt
+mAP@0.5: 0.9933

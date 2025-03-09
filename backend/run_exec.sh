@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Default values
-IMAGE_PATH=""
-OUTPUT_PATH=""
+IMAGE_PATH="/Users/obaidmohiuddin/Downloads/test_data/test_images"
+OUTPUT_PATH="/Users/obaidmohiuddin/Downloads/test_data/results"
 
 # Parse command-line arguments
 while [[ $# -gt 0 ]]; do
@@ -32,8 +32,8 @@ if [[ -z "$IMAGE_PATH" || -z "$OUTPUT_PATH" ]]; then
 fi
 
 echo "Running Python script with:"
-echo "  📂 Image Path: $IMAGE_PATH"
-echo "  📂 Output Path: $OUTPUT_PATH"
+echo "Image Path: $IMAGE_PATH"
+echo "Output Path: $OUTPUT_PATH"
 
-# Run evaluation.py
-python3 /Users/obaidmohiuddin/Desktop/curly-spoon27/backend/evaluation.py "$OUTPUT_PATH" "$IMAGE_PATH"
+# Run the Python script
+python test.py --image_folder "$IMAGE_PATH" --results_folder "$OUTPUT_PATH"

@@ -2,8 +2,6 @@ import numpy as np
 import argparse
 import os
 
-# CODE GIVEN BY THE EVALUATION SCRIPT
-
 def compute_iou(box1, box2):
     """Compute IoU between two bounding boxes."""
     x1 = max(box1[0], box2[0])
@@ -79,6 +77,7 @@ def read_detections(file_path):
     """Read detections from file."""
     detections = []
     file_path = os.path.join(file_path, 'results.txt')
+    print(f"DEBUG: Opening detection file at {file_path}")
     with open(file_path, 'r') as f:
         for line in f:
             parts = line.strip().split()
